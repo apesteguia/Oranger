@@ -1,0 +1,4 @@
+(executable
+ (public_name Oranger)
+ (name main)
+ (libraries curses ui))
