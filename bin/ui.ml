@@ -75,18 +75,34 @@ module UI = struct
     | 'q' -> end_window w
     | 'j' ->
         let dirs = FILES.get_directories () in
-        display_dirs w dirs (i + 1);
-        box w 0 0;
-        set_dir_title w (Sys.getcwd ());
-        ignore (wrefresh w);
-        main_loop w (i + 1)
+        if i >= Array.length dirs - 1 then (
+          display_dirs w dirs 0;
+          box w 0 0;
+          set_dir_title w (Sys.getcwd ());
+          ignore (wrefresh w);
+
+          main_loop w 0)
+        else (
+          display_dirs w dirs (i + 1);
+          box w 0 0;
+          set_dir_title w (Sys.getcwd ());
+          ignore (wrefresh w);
+          main_loop w (i + 1))
     | 'k' ->
         let dirs = FILES.get_directories () in
-        display_dirs w dirs (i - 1);
-        box w 0 0;
-        set_dir_title w (Sys.getcwd ());
-        ignore (wrefresh w);
-        main_loop w (i - 1)
+        if i >= Array.length dirs - 1 then (
+          display_dirs w dirs (Array.length dirs);
+          box w 0 0;
+          set_dir_title w (Sys.getcwd ());
+          ignore (wrefresh w);
+
+          main_loop w (Array.length dirs))
+        else (
+          display_dirs w dirs (i + 1);
+          box w 0 0;
+          set_dir_title w (Sys.getcwd ());
+          ignore (wrefresh w);
+          main_loop w (i - 1))
     | 'l' ->
         let current_dir = Sys.getcwd () in
         let dirs = Sys.readdir current_dir in
@@ -101,7 +117,7 @@ module UI = struct
     | 'h' ->
         Sys.chdir Filename.parent_dir_name;
         let dirs = FILES.get_directories () in
-        display_dirs w dirs 1;
+        display_dirs w dirs 0;
         box w 0 0;
         set_dir_title w (Sys.getcwd ());
         ignore (wrefresh w);
